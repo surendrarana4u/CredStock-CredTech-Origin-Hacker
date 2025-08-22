@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cred Stock - Your Stock Market Partner</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.7.1/dist/gsap.min.js"></script>
+    <script src="api.js"></script>
+    <script src="frontend-api.js"></script>
+</head>
+
+<body>
+    <!-- Stock Market Background -->
+    <div class="stock-background">
+        <div class="stock-grid"></div>
+
+        <div class="stock-ticker">
+            <div class="ticker-content">
+                <span class="ticker-symbol">AAPL <span class="ticker-price">$175.43</span> <span class="ticker-change">+2.1%</span></span>
+                <span class="ticker-symbol">GOOGL <span class="ticker-price">$2,843.21</span> <span class="ticker-change">+1.3%</span></span>
+                <span class="ticker-symbol">TSLA <span class="ticker-price">$248.87</span> <span class="ticker-change">-0.8%</span></span>
+                <span class="ticker-symbol">MSFT <span class="ticker-price">$378.91</span> <span class="ticker-change">+1.7%</span></span>
+                <span class="ticker-symbol">AMZN <span class="ticker-price">$3,421.56</span> <span class="ticker-change">+0.9%</span></span>
+                <span class="ticker-symbol">NVDA <span class="ticker-price">$456.78</span> <span class="ticker-change">+3.2%</span></span>
+                <span class="ticker-symbol">META <span class="ticker-price">$312.45</span> <span class="ticker-change">+1.8%</span></span>
+                <span class="ticker-symbol">NFLX <span class="ticker-price">$445.32</span> <span class="ticker-change">-0.5%</span></span>
+                <span class="ticker-symbol">SPY <span class="ticker-price">$445.67</span> <span class="ticker-change">+0.7%</span></span>
+                <span class="ticker-symbol">QQQ <span class="ticker-price">$378.92</span> <span class="ticker-change">+1.1%</span></span>
+            </div>
+        </div>
+
+        <div class="stock-particles" id="stock-particles"></div>
+
+        <div class="chart-lines" id="chart-lines"></div>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <img src="images/CredStock.png" alt="Cred Stock Logo" class="logo">
+        </div>
+        <div class="search-container">
+            <form action="#" method="get">
+                <input type="text" placeholder="Search stocks..." name="search">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <div class="credit-score-panel">
+            <div class="credit-score-container">
+                <div class="credit-score-label">Credit Score</div>
+                <div class="credit-score-value">750</div>
+                <div class="credit-score-trend">
+                    <i class="fas fa-arrow-up"></i>
+                    <span class="trend-text">+12</span>
+                </div>
+                <div class="credit-score-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                    <div class="score-range">
+                        <span>300</span>
+                        <span>850</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <nav>
+            <ul class="nav-links">
+                <li><a href="#home" class="active" data-panel="home">Home</a></li>
+                <li><a href="#ideas" data-panel="ideas">Ideas</a></li>
+                <li><a href="#experts" data-panel="experts">Top Experts</a></li>
+                <li><a href="#news" data-panel="news">News</a></li>
+                <li><a href="#portfolio" data-panel="portfolio">Portfolio</a></li>
+                <li><a href="#contact" data-panel="contact">Contact</a></li>
+                <li id="logout-item" style="display: none;">
+                    <a href="#" onclick="handleLogout(); return false;" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero-section active-panel">
+            <div class="hero-content">
+                <h1>Welcome to <span class="highlight">Cred Stock</span></h1>
+                <p>Your trusted partner for stock market insights and investment strategies</p>
+                <button class="cta-button">Get Started</button>
+            </div>
+            <div class="hero-3d-container">
+                <div class="hero-3d-model" id="hero-3d-container"></div>
+                <div class="trading-floor-animation" id="trading-floor-container"></div>
+                <div class="graph-3d-container" id="graph-3d-container"></div>
+            </div>
+            
+            <!-- Authentication Interface (initially hidden) -->
+            <div class="auth-interface" id="auth-interface">
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <h2>Join Cred Stock</h2>
+                        <p>Start your investment journey today</p>
+                    </div>
+                    
+                    <div class="auth-options">
+                        <div class="auth-option login-option">
+                            <div class="option-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <h3>Login</h3>
+                            <form class="auth-form login-form">
+                                <input type="text" placeholder="Username" name="username" required>
+                                <input type="password" placeholder="Password" name="password" required>
+                                <button type="submit" class="auth-btn">Sign In</button>
+                            </form>
+                        </div>
+                        
+                        <div class="auth-divider">
+                            <span>or</span>
+                        </div>
+                        
+                        <div class="auth-option signup-option">
+                            <div class="option-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h3>Create Account</h3>
+                            <form class="auth-form signup-form">
+                                <input type="text" placeholder="Full Name" name="name" required>
+                                <input type="text" placeholder="Username" name="username" required>
+                                <input type="email" placeholder="Email Address" name="email" required>
+                                <div class="form-row">
+                                    <input type="number" placeholder="Age" name="age" min="18" max="100" required>
+                                    <select name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mobile-otp-container">
+                                    <input type="tel" placeholder="Mobile Number" name="mobile" pattern="[0-9]{10}" required>
+                                    <button type="button" class="otp-btn" id="send-otp-btn">Send OTP</button>
+                                </div>
+                                <div class="otp-verification" id="otp-verification" style="display: none;">
+                                    <input type="text" placeholder="Enter OTP" name="otp" pattern="[0-9]{6}" maxlength="6">
+                                    <div class="otp-timer" id="otp-timer">02:00</div>
+                                    <button type="button" class="resend-otp" id="resend-otp" disabled>Resend OTP</button>
+                                </div>
+                                
+
+                                
+                                <input type="password" placeholder="Password" name="password" required>
+                                <input type="password" placeholder="Confirm Password" name="confirmPassword" required>
+                                <button type="submit" class="auth-btn" id="signup-btn">Sign Up</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <button class="back-to-hero" id="back-to-hero">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Home
+                    </button>
+                </div>
+                
+                <!-- 3D Animation Container for Auth Interface -->
+                <div class="auth-3d-container" id="auth-3d-container"></div>
+            </div>
+        </section>
+
+        <section id="ideas" class="ideas-section panel">
+            <h2>Investment Ideas</h2>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-3d-element"></div>
+                    <h3>Growth Stocks</h3>
+                    <p>Discover high-potential growth stocks for long-term investment</p>
+                </div>
+                <div class="card">
+                    <div class="card-3d-element"></div>
+                    <h3>Dividend Stocks</h3>
+                    <p>Stable income-generating stocks with consistent dividend payouts</p>
+                </div>
+                <div class="card">
+                    <div class="card-3d-element"></div>
+                    <h3>Tech Innovations</h3>
+                    <p>Cutting-edge technology stocks shaping the future</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="experts" class="experts-section panel">
+            <h2>Top Experts</h2>
+            <div class="experts-container">
+                <div class="expert-card">
+                    <div class="expert-image"></div>
+                    <h3>Sarah Johnson</h3>
+                    <p>Financial Analyst</p>
+                </div>
+                <div class="expert-card">
+                    <div class="expert-image"></div>
+                    <h3>Michael Chen</h3>
+                    <p>Investment Strategist</p>
+                </div>
+                <div class="expert-card">
+                    <div class="expert-image"></div>
+                    <h3>Priya Sharma</h3>
+                    <p>Market Researcher</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" class="news-section panel">
+            <h2>Latest News</h2>
+            <div class="news-container">
+                <div class="news-card">
+                    <div class="news-image"></div>
+                    <h3>Market Trends 2023</h3>
+                    <p>Analysis of emerging market trends and predictions</p>
+                </div>
+                <div class="news-card">
+                    <div class="news-image"></div>
+                    <h3>Tech Sector Update</h3>
+                    <p>Latest developments in the technology sector</p>
+                </div>
+                <div class="news-card">
+                    <div class="news-image"></div>
+                    <h3>Global Economic Outlook</h3>
+                    <p>Impact of global events on stock markets</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="portfolio-section panel">
+            <h2>Portfolio Management</h2>
+            <div class="portfolio-features">
+                <div class="feature">
+                    <div class="feature-icon"></div>
+                    <h3>Track Performance</h3>
+                    <p>Monitor your investments in real-time</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"></div>
+                    <h3>Risk Analysis</h3>
+                    <p>Comprehensive risk assessment tools</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon"></div>
+                    <h3>Diversification</h3>
+                    <p>Optimize your portfolio allocation</p>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <section id="contact" class="contact-section panel">
+            <h2>Contact Us</h2>
+            <div class="contact-container">
+                <form class="contact-form">
+                    <input type="text" placeholder="Name" required>
+                    <input type="email" placeholder="Email" required>
+                    <textarea placeholder="Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>123 Finance Street, New York, NY</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>info@credstock.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-logo">
+                <img src="images/CredStock.png" alt="Cred Stock Logo">
+            </div>
+            <div class="footer-about">
+                <h3>About Us</h3>
+                <p>Cred Stock is a premier platform for stock market analysis, investment strategies, and portfolio management. Our team of experts provides valuable insights to help you make informed investment decisions.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#ideas">Ideas</a></li>
+                    <li><a href="#experts">Experts</a></li>
+                    <li><a href="#news">News</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-newsletter">
+                <h3>Newsletter</h3>
+                <p>Subscribe to our newsletter for the latest updates</p>
+                <form>
+                    <input type="email" placeholder="Your email">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Cred Stock. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Trade Modal -->
+    <div class="trade-modal" id="trade-modal">
+        <div class="trade-modal-content">
+            <div class="trade-modal-header">
+                <h3 id="trade-modal-title">Place Trade Order</h3>
+                <button class="close-modal" onclick="closeTradeModal()">&times;</button>
+            </div>
+            <div class="trade-modal-body">
+                <form id="trade-form">
+                    <div class="form-group">
+                        <label for="trade-symbol">Stock Symbol</label>
+                        <input type="text" id="trade-symbol" placeholder="e.g., AAPL, GOOGL" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-quantity">Quantity</label>
+                        <input type="number" id="trade-quantity" min="1" placeholder="Number of shares" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-price">Price per Share ($)</label>
+                        <input type="number" id="trade-price" step="0.01" min="0.01" placeholder="Price per share" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-type">Order Type</label>
+                        <select id="trade-type" required>
+                            <option value="market">Market Order</option>
+                            <option value="limit">Limit Order</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="trade-submit-btn" id="trade-submit-btn">
+                        <i class="fas fa-check"></i>
+                        Confirm Trade
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
